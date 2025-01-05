@@ -13,5 +13,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  minio:
+    image: docker.io/bitnami/minio:2022
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minionetwork
+    volumes:
+      - 'minio_data:/data'
+    env_file:
+      - .env
+
+networks:
+  minionetwork:
+    driver: bridge
+
+
 volumes:
   postgres_data:
+  minio_data:

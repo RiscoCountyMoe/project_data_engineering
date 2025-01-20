@@ -28,6 +28,10 @@ class EtlProcessor:
             return None
         
     def transform(self, df, partition_cols=None):
+        columns_to_drop = ['ID', 'Case Number', 'IUCR', 'Description', 'FBI Code', 'X Coordinate',
+              'Y Coordinate', 'Latitude', 'Longitude', 'Updated On', 'Location']
+        df = df.drop(columns_to_drop, axis=1)
+
         if partition_cols:
             pq.write_to_dataset(pa.Table.from_pandas(df), root_path='dataset', partition_cols=partition_cols, compression='brotli')
         else:

@@ -15,6 +15,7 @@ services:
 
   minio:
     image: docker.io/bitnami/minio:2022
+    restart: always
     ports:
       - '9000:9000'
       - '9001:9001'

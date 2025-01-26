@@ -10,11 +10,14 @@ services:
       POSTGRES_DB: source_database
     ports:
       - "5432:5432"
+    networks:
+      - minionetwork
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   minio:
     image: docker.io/bitnami/minio:2022
+    container_name: minio
     restart: always
     ports:
       - '9000:9000'

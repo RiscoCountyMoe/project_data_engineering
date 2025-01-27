@@ -15,6 +15,46 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  mariadb:
+    hostname: mariadb
+    image: mariadb:10.5.8
+    container_name: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: metastore_db
+    networks:
+      - minionetwork
+
+  hive-metastore:
+    hostname: hive-metastore
+    image: 'bitsondatadev/hive-metastore:latest'
+    container_name: hive-metastore
+    ports:
+      - '9083:9083'
+    volumes:
+      - ./conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+    environment:
+      METASTORE_DB_HOSTNAME: mariadb
+    depends_on:
+      - mariadb
+    networks:
+      - minionetwork
+
+  trino:
+    hostname: trino
+    image: 'trinodb/trino:351'
+    container_name: trino
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./etc:/usr/lib/trino/etc:ro
+    networks:
+      - minionetwork
+
   minio:
     image: docker.io/bitnami/minio:2022
     container_name: minio
@@ -28,6 +68,14 @@ services:
       - 'minio_data:/data'
     env_file:
       - .env
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    networks:
+      - minionetwork
 
 networks:
   minionetwork:

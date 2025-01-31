@@ -28,6 +28,8 @@ services:
       MYSQL_DATABASE: metastore_db
     networks:
       - minionetwork
+    volumes:
+      - mariadb_data:/var/lib/mysql
 
   hive-metastore:
     hostname: hive-metastore
@@ -85,3 +87,4 @@ networks:
 volumes:
   postgres_data:
   minio_data:
+  mariadb_data:

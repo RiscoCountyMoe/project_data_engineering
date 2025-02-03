@@ -28,11 +28,11 @@ class EtlProcessor:
         
     def transform(self, df):
         columns_to_drop = ['ID', 'Case Number', 'IUCR', 'Description', 'FBI Code', 'X Coordinate',
-                           'Y Coordinate', 'Latitude', 'Longitude', 'Updated On', 'Location']
+                            'Y Coordinate', 'Latitude', 'Longitude', 'Updated On', 'Location']
         df = df.drop(columns_to_drop, axis=1)
         parquet_buffer = io.BytesIO()
         table = pa.Table.from_pandas(df)
-        pq.write_table(table, parquet_buffer, compression='brotli')
+        pq.write_table(table, parquet_buffer, compression='snappy', use_dictionary=False)
         parquet_buffer.seek(0)
         return parquet_buffer
 
@@ -53,7 +53,7 @@ class EtlProcessor:
                 break
 
             parquet_buffer = self.transform(df)
-            object_name = f'{file_index}.parq'
+            object_name = f'{file_index}.parquet'
             self.load(parquet_buffer, object_name)
             
             offset += chunk_size

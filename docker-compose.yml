@@ -38,7 +38,7 @@ services:
     ports:
       - '9083:9083'
     volumes:
-      - ./conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+      - ./conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml
     environment:
       METASTORE_DB_HOSTNAME: mariadb
     depends_on:
@@ -53,9 +53,14 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - ./etc:/usr/lib/trino/etc:ro
+      - ./etc:/usr/lib/trino/etc
     networks:
       - minionetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   minio:
     image: docker.io/bitnami/minio:2022
@@ -78,11 +83,15 @@ services:
       - "3000:3000"
     networks:
       - minionetwork
+    volumes:
+      - ./metabase-plugins:/plugins
+    depends_on:
+      trino:
+        condition: service_healthy
 
 networks:
   minionetwork:
     driver: bridge
-
 
 volumes:
   postgres_data:

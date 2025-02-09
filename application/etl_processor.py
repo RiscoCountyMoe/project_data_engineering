@@ -28,7 +28,7 @@ class EtlProcessor:
         
     def transform(self, df):
         columns_to_drop = ['ID', 'Case Number', 'IUCR', 'Description', 'FBI Code', 'X Coordinate',
-                            'Y Coordinate', 'Latitude', 'Longitude', 'Updated On', 'Location']
+                            'Y Coordinate', 'Latitude', 'Longitude', 'Updated On', 'Location', 'District']
         df = df.drop(columns_to_drop, axis=1)
         parquet_buffer = io.BytesIO()
         table = pa.Table.from_pandas(df)

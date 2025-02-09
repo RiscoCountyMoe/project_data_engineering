@@ -2,11 +2,10 @@ import os
 from application.etl_processor import EtlProcessor
 
 def main():
+    chunk_size = 100000
+
     etl_processor = EtlProcessor()
-    df = etl_processor.extract()
-    print(df['ID'])
-    parquet = etl_processor.transform(df)
-    etl_processor.load(parquet, 'data.parquet')
+    etl_processor.process_in_chunks(chunk_size)
 
 if __name__ == "__main__":
     main()

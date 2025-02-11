@@ -1,7 +1,48 @@
-1. Run docker compose up -d to start the containers
-2. create folder with the name 'data' in your project directory
-3. Download dataset from {link} and unzip folder 'data' in your project directory
-4. run import_data.py to import data to database (can take several minutes)
+# Project Setup
 
+## Steps to Set Up
 
-http://localhost:9000 
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/RiscoCountyMoe/project_data_engineering.git
+    ```
+2. **Create a folder**:
+    Create a folder named `data` in your project directory.
+3. **Download the dataset**:
+    Download the dataset from this link and unzip the `data` folder into your project directory.
+4. **Build the containers**:
+    ```bash
+    docker compose build
+    ```
+5. **Start the containers**:
+    ```bash
+    docker compose up -d
+    ```
+6. **Import data**:
+    ```bash
+    make prepare
+    ```
+    This marks the starting point for the ETL pipeline.
+7. **Run the pipeline**:
+    ```bash
+    make start
+    ```
+    - If plugins in Metabase cannot be installed, run:
+    ```bash
+    make plugins
+    ```
+8. **Create schema and table in Trino**:
+    ```bash
+    make migration
+    ```
+9. **Set up Metabase**:
+    Open http://localhost:9000 and create your own Metabase.
+    - To add a database, use the Presto or Starburst driver:
+        - Host: trino
+        - Port: 8080
+        - Catalog: minio
+        - Schema: data
+        - Username: user
+        - Password: leave empty (Trino does not allow passwords)
+
+    You can now explore the data in Metabase and create simple dashboards.

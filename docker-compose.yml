@@ -4,10 +4,8 @@ services:
     image: postgres:latest
     container_name: postgres
     restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: source_database
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     networks:
@@ -21,11 +19,8 @@ services:
     container_name: mariadb
     ports:
       - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_DATABASE: metastore_db
+    env_file:
+      - .env
     networks:
       - minionetwork
     volumes:
@@ -39,8 +34,8 @@ services:
       - '9083:9083'
     volumes:
       - ./conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml
-    environment:
-      METASTORE_DB_HOSTNAME: mariadb
+    env_file:
+      - .env
     depends_on:
       - mariadb
     networks:
@@ -85,9 +80,23 @@ services:
       - minionetwork
     volumes:
       - ./metabase-plugins:/plugins
+      - metabase_data:/metabase-data
     depends_on:
       trino:
         condition: service_healthy
+
+  etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: etl
+    networks:
+      - minionetwork
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - minio
 
 networks:
   minionetwork:
@@ -97,3 +106,4 @@ volumes:
   postgres_data:
   minio_data:
   mariadb_data:
+  metabase_data:

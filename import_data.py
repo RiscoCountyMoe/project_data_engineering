@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-source_db = os.getenv('SOURCE_DB')
+source_db = os.getenv('SOURCE_DB_LOCAL')
 
 engine = create_engine(source_db)
 

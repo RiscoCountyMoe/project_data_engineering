@@ -9,7 +9,7 @@
 2. **Create a folder**:
     Create a folder named `data` in your project directory.
 3. **Download the dataset**:
-    Download the dataset from this link and unzip the `data` folder into your project directory.
+    Download the dataset from this link (https://1drv.ms/x/c/7692cb1e67a6dc27/Ea1kpkC4tfZEhqG5nXdjXGgBqTDkyqzpg4NltIlswA5pfg?e=L0XxjG&download=1) and add it to your `data` folder.
 4. **Build the containers**:
     ```bash
     docker compose build

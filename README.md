@@ -36,7 +36,7 @@
     make migration
     ```
 9. **Set up Metabase**:
-    Open http://localhost:9000 and create your own Metabase.
+    Open http://localhost:3000 and create your own Metabase.
     - To add a database, use the Presto or Starburst driver:
         - Host: trino
         - Port: 8080
